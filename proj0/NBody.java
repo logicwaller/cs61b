@@ -68,7 +68,7 @@ public class NBody {
             vy = in.readDouble();
             m = in.readDouble();
             img = in.readString();
-            Planet p = new Planet(px, py, vx, vy, m, "images/" + img);
+            Planet p = new Planet(px, py, vx, vy, m, img);
             ps[i] = p;
         }
         return ps;
