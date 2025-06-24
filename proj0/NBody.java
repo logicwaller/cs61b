@@ -68,7 +68,7 @@ public class NBody {
             vy = in.readDouble();
             m = in.readDouble();
             img = in.readString();
-            Planet p = new Planet(px, py, vx, vy, m, img);
+            Planet p = new Planet(px, py, vx, vy, m, "images/" + img); //注：这里不加"images/"会无法读取文件，但是加了之后过不了gradescope，需要删掉这句再交
             ps[i] = p;
         }
         return ps;
