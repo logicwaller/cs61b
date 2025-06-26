@@ -38,11 +38,11 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public void addLast(T item) {
         Node last = head.prev;
-        Node new_node = new Node(item, last, head);
-        head.prev = new_node;
-        last.next = new_node;
+        Node newNode = new Node(item, last, head);
+        head.prev = newNode;
+        last.next = newNode;
         if (last == head) {      // 同理，若原链表为空，则新节点既是起点也是终点
-            head.next = new_node;
+            head.next = newNode;
         }
         size += 1;
     }
@@ -119,7 +119,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public T next() {
-            T item = (T)now.item;
+            T item = (T) now.item;
             now = now.next;
             pos += 1;
             return item;
@@ -139,8 +139,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
                 return false;
             }
             Node t = this.head.next;
-            for(int i = 0; i < this.size(); i++){
-                if (!t.item.equals(no.get(i))){
+            for (int i = 0; i < this.size(); i++) {
+                if (!t.item.equals(no.get(i))) {
                     return false;
                 }
                 t = t.next;
@@ -155,7 +155,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
     private T getRecursive(Node now, int index) {
         if (index == 0) {
-            return (T)now.item;
+            return (T) now.item;
         }
         if (now.next == head) {
             return null;

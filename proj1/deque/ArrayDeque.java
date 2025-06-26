@@ -25,7 +25,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             }
         } else {
             res = index + 1;
-            if (res > array.length -1) {
+            if (res > array.length - 1) {
                 res = 0;
             }
         }
@@ -116,7 +116,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T get(int index) {
-        if (index > size - 1) return null;
+        if (index > size - 1) {
+            return null;
+        }
         int start = circularIndex(false, nextFirst);
         start = (start + index) % array.length;
         return array[start];
