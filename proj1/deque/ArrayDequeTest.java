@@ -18,11 +18,17 @@ public class ArrayDequeTest {
         bug.addLast(2);
         bug.addLast(3);
         bug.addLast(4);
-
+        int test = 2;
+        for(int i : bug){
+            assertEquals(test, i);
+            test += 1;
+        }
+        assertEquals(bug, bug);
         assertEquals(3, bug.size());
         assertEquals(4, (int)bug.removeLast());
         assertEquals(3, (int)bug.removeLast());
         assertEquals(2, (int)bug.removeLast());
+        assertEquals(true, bug.isEmpty());
     }
 
     @Test

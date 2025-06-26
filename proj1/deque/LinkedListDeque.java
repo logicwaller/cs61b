@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private static class node<T> {
         public T item;
         public node next;
@@ -23,6 +23,7 @@ public class LinkedListDeque<T> {
         head.next = head;
     }
 
+    @Override
     public void addFirst(T item){
         node first = head.next;
         node new_node = new node(item, head, first);
@@ -34,6 +35,7 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
+    @Override
     public void addLast(T item){
         node last = head.prev;
         node new_node = new node(item, last, head);
@@ -45,15 +47,12 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
-    public boolean isEmpty(){
-        if (head.next == head && head.prev == head) return true;
-        return false;
-    }
-
+    @Override
     public int size(){
         return size;
     }
 
+    @Override
     public void printDeque(){
         node now = head.next;
         while (now != head){
@@ -63,6 +62,7 @@ public class LinkedListDeque<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst(){
         if (this.isEmpty()) return null;
         T item = (T) head.next.item; //这里需要将next的item类型转换为T，否则默认为object
@@ -73,6 +73,7 @@ public class LinkedListDeque<T> {
         return item;
     }
 
+    @Override
     public T removeLast(){
         if (this.isEmpty()) return null;
         T item = (T) head.prev.item; //这里需要将next的item类型转换为T，否则默认为object
@@ -83,6 +84,7 @@ public class LinkedListDeque<T> {
         return item;
     }
 
+    @Override
     public T get(int index){
         node now = head.next;
         if(now == head) return null;
@@ -93,17 +95,44 @@ public class LinkedListDeque<T> {
         return (T)now.item;
     }
 
-//    public Iterator<T> iterator(){}
+    private class LinkedListDequeIterator implements Iterator<T>{
+        int pos = 0;
+        node now = head.next;
+        @Override
+        public boolean hasNext() {
+            return (pos < size);
+        }
+
+        @Override
+        public T next() {
+            T item = (T)now.item;
+            now = now.next;
+            pos += 1;
+            return item;
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator(){
+        return new LinkedListDequeIterator();
+    }
 
     @Override
     public boolean equals(Object o){
-        if(!(o instanceof LinkedListDeque)) return false;
-        LinkedListDeque no = (LinkedListDeque)o;
-        if(no.size() != this.size()) return false;
-        for(int i = 0; i < size; i++){
-            if(no.get(i) != this.get(i)) return false;
+        if(o instanceof LinkedListDeque no){
+            if(this.size() != no.size()) return false;
+            node t = this.head.next;
+            node n = no.head.next;
+            while (t != this.head){
+                if(t.item != n.item){
+                    return false;
+                }
+                t = t.next;
+                n = n.next;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     public T getRecursive(int index){

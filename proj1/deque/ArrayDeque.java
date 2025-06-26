@@ -1,6 +1,8 @@
 package deque;
 
-public class ArrayDeque<T> {
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] array;
     private int size;
     private int nextFirst;
@@ -30,6 +32,7 @@ public class ArrayDeque<T> {
         return res;
     }
 
+    @Override
     public void addFirst(T item){
         if (size == array.length){
             resize(size * 2);
@@ -39,6 +42,7 @@ public class ArrayDeque<T> {
         nextFirst = circularIndex(true, nextFirst);
     }
 
+    @Override
     public void addLast(T item){
         if (size == array.length){
             resize(size * 2);
@@ -48,15 +52,12 @@ public class ArrayDeque<T> {
         nextLast = circularIndex(false, nextLast);
     }
 
-    public boolean isEmpty(){
-        if (size == 0) return true;
-        return false;
-    }
-
+    @Override
     public int size(){
         return size;
     }
 
+    @Override
     public void printDeque(){
         int start = circularIndex(false, nextFirst);//数组起始点为nextFirst的下一个
         int end = circularIndex(true, nextLast);    //数组终点为nextLast的前一个
@@ -67,6 +68,7 @@ public class ArrayDeque<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst(){
         if (isEmpty()) return null;
         int first = circularIndex(false, nextFirst);
@@ -80,6 +82,7 @@ public class ArrayDeque<T> {
         return item;
     }
 
+    @Override
     public T removeLast(){
         if (isEmpty()) return null;
         int last = circularIndex(true, nextLast);
@@ -107,6 +110,7 @@ public class ArrayDeque<T> {
         nextLast = size;            //这里nextFirst重指向为新数组的最后一个位置，nextLast为新数组未被赋值的第一个位置
     }
 
+    @Override
     public T get(int index){
         if (index > size - 1) return null;
         int start = circularIndex(false, nextFirst);
@@ -114,17 +118,38 @@ public class ArrayDeque<T> {
         return array[start];
     }
 
-//    public Iterator<T> iterator(){}
+    private class ArryDequeIterator implements Iterator<T>{
+        int pos = 0;
+        int index = circularIndex(false, nextFirst);
+        @Override
+        public boolean hasNext() {
+            return (pos < size);
+        }
+
+        @Override
+        public T next() {
+            T item = array[index];
+            index = circularIndex(false, index);
+            pos += 1;
+            return item;
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator(){
+        return new ArryDequeIterator();
+    }
 
     @Override
     public boolean equals(Object o){
-        if(!(o instanceof ArrayDeque)) return false;
-        ArrayDeque no = (ArrayDeque) o;
-        if(no.size() != this.size()) return false;
-        for(int i = 0; i < size; i++){
-            if(no.get(i) != this.get(i)) return false;
+        if(o instanceof ArrayDeque no){
+            if(no.size() != this.size) return false;
+            for(int i = 0; i < size; i++){
+                if (no.get(i) != this.get(i)) return false;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
 }
