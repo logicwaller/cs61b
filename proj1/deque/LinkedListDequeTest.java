@@ -1,6 +1,8 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 
@@ -32,7 +34,7 @@ public class LinkedListDequeTest {
 		assertEquals(3, lld1.size());
 
         Integer test = 1;
-        for(Integer i : lld1){
+        for(Integer i : lld1) {
             assertEquals(test, i);
             test += 1;
         }
@@ -148,6 +150,48 @@ public class LinkedListDequeTest {
 
         for (int i = 0; i < 100; i++) {
             assertEquals("Should have the same value", i, lld1.getRecursive(i), 0.0);
+        }
+    }
+
+    @Test
+    public void randomizedTest(){
+        LinkedListDeque<Integer> bug = new LinkedListDeque<>();
+        ArrayDeque<Integer> L = new ArrayDeque<>();
+        int N = 100000;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0, 6);
+            if (operationNumber == 0) {
+                // addLast
+                int randVal = StdRandom.uniform(0, 100);
+                bug.addLast(randVal);
+                L.addLast(randVal);
+//                System.out.println("addLast(" + randVal + ")");
+            } else if (operationNumber == 1){
+                // addFirst
+                int randVal = StdRandom.uniform(0, 100);
+                bug.addFirst(randVal);
+                L.addFirst(randVal);
+//                System.out.println("addFirst(" + randVal + ")");
+            } else if (operationNumber == 2) {
+                // size
+//                System.out.println("size: " + L.size());
+                assertEquals(L.size(), bug.size());
+            } else if (L.size() > 0 && operationNumber == 3){
+                // removeLast
+                assertEquals(L.removeLast(), bug.removeLast());
+            } else if (L.size() > 0 && operationNumber == 4){
+                // removeFirst
+                assertEquals(L.removeFirst(), bug.removeFirst());
+            } else if (L.size() > 0 && operationNumber == 5){
+                // get
+                assertEquals(bug.get(L.size() - 1), L.get(L.size() - 1));
+                assertEquals(bug.getRecursive(L.size() - 1), L.get(L.size() - 1));
+            }
+        }
+        if (L.equals(bug)) {
+            System.out.println("YEAHHHHHHHHHHHHHHH");
+        } else {
+            System.out.println("NOOOOOOOOOOOOOOO");
         }
     }
 }
